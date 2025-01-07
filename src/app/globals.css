@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Geostar+Fill&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/handwriting');
+@import url('https://fonts.cdnfonts.com/css/druk-trial');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+
+@layer utilities {
+  .floating-card {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes leave {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-enter {
+  animation: enter 0.3s ease-out;
+}
+
+.animate-leave {
+  animation: leave 0.3s ease-in;
+}
+
+@font-face {
+  font-family: 'Maelstrom';
+  src: url('../fonts/Test Maelstrom Sans/test-maelstrom-sans-bold.woff2') format('opentype');
+}
+
+@font-face {
+  font-family: 'Migra-Extrabold';
+  src: url('../fonts/Migra/Migra-Extrabold.woff2') format('opentype');
+}
+
+@font-face {
+  font-family: 'Migra-ExtraLight';
+  src: url('../fonts/Migra/Migra-Extralight.woff2') format('opentype');
+}
