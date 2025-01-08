@@ -88,3 +88,8 @@ body {
   font-family: 'Migra-ExtraLight';
   src: url('../fonts/Migra/Migra-Extralight.woff2') format('opentype');
 }
+
+@font-face {
+  font-family: 'Tusker-Grotesk';
+  src: url('../fonts/Tasker/TuskerGrotesk.woff2') format('opentype');
+}

@@ -10,6 +10,11 @@ export default {
   ],
   theme: {
     extend: {
+      lineHeight: {
+        'none': '1', // Default for `leading-none`
+        'zero6': '0.66', // Custom `line-height: 0`
+        'zero': '0.9',
+      },
       fontFamily:{
         drukTrial: ["Druk Trial", "sans-serif"],
         drukTextTrial: ["Druk Text Trial", "sans-serif"],
@@ -23,6 +28,7 @@ export default {
         maelstrom: ["Maelstrom", "serif"],
         migraExtrabold: ["Migra-Extrabold", "serif"],
         migraExtralight: ["Migra-Extralight", "serif"],
+        taskerGrotesk:["Tusker-Grotesk", "sans-serif"]
       },
       colors: {
         background: "var(--background)",

@@ -15,6 +15,7 @@ import DateCounter from "./datecounter/dateCounter";
 import Lottie from "react-lottie-player";
 import Info from "../../public/infoAnime.json";
 import toast, { Toaster } from "react-hot-toast";
+import Laptop from "./3D/LaptopModel";
 
 export default function Portfolio() {
   const navProjectRef = useRef<HTMLDivElement>(null);
@@ -27,7 +28,7 @@ export default function Portfolio() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const imageFadeStart = window.innerHeight * 0.50; // Start fading after 25% of the viewport height
+      const imageFadeStart = window.innerHeight * 0.5; // Start fading after 25% of the viewport height
       const imageFadeEnd = window.innerHeight * 0.65; // Gradual fade-out ends at 55% of the viewport height
       const imageReappearStart = navProjectRef.current?.offsetTop || 0;
       const imageReappearEnd = navContacttRef.current?.offsetTop || 0;
@@ -36,13 +37,25 @@ export default function Portfolio() {
       if (scrollPosition < imageFadeStart) {
         setBackgroundOpacity(1); // No fade at the top
         setBackgroundPosition(0); // Keep image at the top
-      } else if (scrollPosition >= imageFadeStart && scrollPosition <= imageFadeEnd) {
-        setBackgroundOpacity(1 - (scrollPosition - imageFadeStart) / (imageFadeEnd - imageFadeStart)); // Gradual fade-out
+      } else if (
+        scrollPosition >= imageFadeStart &&
+        scrollPosition <= imageFadeEnd
+      ) {
+        setBackgroundOpacity(
+          1 -
+            (scrollPosition - imageFadeStart) / (imageFadeEnd - imageFadeStart)
+        ); // Gradual fade-out
         setBackgroundPosition(-scrollPosition * 0.2); // Image scrolls up slowly
-      } else if (scrollPosition > imageFadeEnd && scrollPosition <= imageReappearStart) {
+      } else if (
+        scrollPosition > imageFadeEnd &&
+        scrollPosition <= imageReappearStart
+      ) {
         setBackgroundOpacity(0); // Fully faded out
         setBackgroundPosition(-scrollPosition * 0.2); // Image scrolls faster
-      } else if (scrollPosition > imageReappearStart && scrollPosition < imageReappearEnd) {
+      } else if (
+        scrollPosition > imageReappearStart &&
+        scrollPosition < imageReappearEnd
+      ) {
         setBackgroundOpacity(0); // Keep the image faded out
         setBackgroundPosition(0); // Reset the position
       } else {
@@ -94,10 +107,7 @@ export default function Portfolio() {
           objectFit="cover"
           className="opacity-50"
         />
-
       </div>
-
-      
 
       <div>
         {/* Hero Section */}
@@ -131,7 +141,7 @@ export default function Portfolio() {
                 <motion.span
                   whileHover={{ scale: 1.1, color: "#f3dbc7" }}
                   transition={{ type: "spring", stiffness: 200 }}
-                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-none tracking-[0.03em]"
+                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-zero tracking-[0.03em]"
                 >
                   Frontend
                 </motion.span>
@@ -139,7 +149,7 @@ export default function Portfolio() {
                 <motion.span
                   whileHover={{ scale: 1.1, color: "#f3dbc7" }}
                   transition={{ type: "spring", stiffness: 200 }}
-                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-none tracking-[0.03em]"
+                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-zero tracking-[0.03em]"
                 >
                   Developer
                 </motion.span>
@@ -164,94 +174,67 @@ export default function Portfolio() {
                   </p>
                 </div>
 
-                
-
                 <div className="mt-6 flex gap-4 justify-end mr-8">
-              {/* <Button
+                  {/* <Button
                 className="hover:bg-[#E8E7CB]"
                 onClick={handleViewProjects}
               >
                 View Projects
               </Button> */}
-              <Button
-                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-3xl p-5"
-                onClick={handleViewContacts}
-              >
-                Contact Me
-              </Button>
-            </div>
-
+                  <Button
+                    className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-3xl p-5"
+                    onClick={handleViewContacts}
+                  >
+                    Contact Me
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
         </section>
 
-        {/* Toast Notification */}
-        <Toaster
-          position="top-center" // You can change position here
-          toastOptions={{
-            duration: 5000, // 5 seconds
-            style: {
-              backgroundColor: "#333", // Dark background
-              color: "#fff", // White text
-              borderRadius: "10px", // Rounded corners
-              padding: "16px", // Padding inside the toast
-              fontSize: "16px", // Font size
-            },
-          }}/>
-
         {/* Introduction Section */}
-        <section className="flex flex-col justify-center items-center mx-auto mt-48">
+        <section className="flex flex-col mx-auto mt-72">
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
             className="text-center z-10"
           >
-            <div className="grid grid-cols-2 gap-y-0 text-[#E8E7CB]">
-              <div className="cursor-pointer">
-                <p className="text-[400px] font-drukCondTrial leading-none hover:text-[#f5eee6] transition-colors duration-500">
-                  RANJULA
-                </p>
-                <p className="text-[400px] font-drukCondTrial leading-none ml-20 hover:text-[#f5eee6] transition-colors duration-500">
-                  ILUKPITIYA
+            <div className="grid grid-cols-2 gap-4">
+              <div className="pl-96">
+                <div className="pr-24">
+                  <p className="font-drukXXCondTrial text-[12rem] tracking-[0.03em] uppercase leading-zero6 text-end text-[#f5eee6]">
+                    Hello. I am Ranjula
+                  </p>
+                  <p className="font-migraExtrabold text-xl tracking-wide leading-zero text-end text-[#f3dbc7]">
+                    Ranjula Ilukpitiya
+                  </p>
+                </div>
+                <p className="text-balance text-2xl text-start font-medium uppercase mt-10">
+                &nbsp;&nbsp;I turn ideas into digital experiences with clean design and
+                  smart code. From startups to agencies, I help craft everything
+                  from interfaces to strategies – all fueled by coffee and
+                  curiosity. When I’m not coding, I’m likely strumming my
+                  guitar, writing songs no one asked for, or losing gracefully
+                  in video games. Let’s create something awesome (or at least
+                  have a good laugh trying)!
                 </p>
               </div>
+
               <div>
-                <h1 className="text-[400px] font-drukCondTrial leading-none cursor-pointer hover:text-[#f5eee6] transition-colors duration-500">
-                  <AgeCounter
-                    startAge={25}
-                    startYear={2025}
-                    startMonth={10}
-                    startDay={13}
-                  />
-                </h1>
-                <p className="font-handWritten font-bold text-xl leading-none cursor-pointer hover:text-[#f5eee6] transition-colors duration-500">
-                  YEARS OLD
-                </p>
-
-                <div className="absolute right-0 top-[1350px] transform -translate-y-1/2 z-0 mr-20">
-              <Image src={dDev} width={90} alt="Dev_Designer" />
-            </div>
-
-            <div className="absolute left-1/2 top-[1330px] transform -translate-y-1/2 z-0 ml-28">
-              <Image src={downLeft} width={130} alt="arrow" />
-            </div>
-
-            <div className="float-end">
-              <Me />
-            </div>
-
+                haha
               </div>
-            </div>
 
-            
+            </div>
           </motion.div>
         </section>
 
         {/* Projects Section */}
-        <section className="relative py-20 bg-[#121212] grid grid-cols-2 justify-center items-center" ref={navProjectRef}>
-
+        <section
+          className="relative py-20 bg-[#121212] grid grid-cols-2 justify-center items-center"
+          ref={navProjectRef}
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -273,7 +256,6 @@ export default function Portfolio() {
               <span className="text-[#f5eee6]">PROJECTS</span>
             </div>
           </motion.div>
-
         </section>
 
         {/* Contact Section */}
