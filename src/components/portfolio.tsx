@@ -4,18 +4,14 @@ import { Button } from "@nextui-org/react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import AgeCounter from "./ageCal/AgeCounter";
-import dDev from "../assets/devD.svg";
-import downLeft from "../assets/DownLeft.svg";
-import Me from "./me/me";
-import ProjectsCards from "./Projects/projectCards";
-import FloatingAudioPlayer from "./mp3Player/player";
 import ContactForm from "./contact/contactForm";
 import DateCounter from "./datecounter/dateCounter";
 import Lottie from "react-lottie-player";
 import Info from "../../public/infoAnime.json";
-import toast, { Toaster } from "react-hot-toast";
-import Laptop from "./3D/LaptopModel";
+import toast from "react-hot-toast";
+import FloatingAudioPlayer from "./mp3Player/player";
+import ProjectsCardsV2 from "./Projects/projectsV2";
+
 
 export default function Portfolio() {
   const navProjectRef = useRef<HTMLDivElement>(null);
@@ -201,8 +197,8 @@ export default function Portfolio() {
             transition={{ duration: 1 }}
             className="text-center z-10"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="pl-96">
+            <div className="grid grid-cols-2 space-x-20">
+              <div className="pl-80">
                 <div className="pr-24">
                   <p className="font-drukXXCondTrial text-[12rem] tracking-[0.03em] uppercase leading-zero6 text-end text-[#f5eee6]">
                     Hello. I am Ranjula
@@ -211,7 +207,7 @@ export default function Portfolio() {
                     Ranjula Ilukpitiya
                   </p>
                 </div>
-                <p className="text-balance text-2xl text-start font-medium uppercase mt-10">
+                <p className="text-balance text-2xl text-start font-semibold text-[#f5eee6] uppercase mt-10">
                 &nbsp;&nbsp;I turn ideas into digital experiences with clean design and
                   smart code. From startups to agencies, I help craft everything
                   from interfaces to strategies – all fueled by coffee and
@@ -222,8 +218,8 @@ export default function Portfolio() {
                 </p>
               </div>
 
-              <div>
-                haha
+              <div className="mx-auto my-auto">
+                <FloatingAudioPlayer/>
               </div>
 
             </div>
@@ -232,7 +228,7 @@ export default function Portfolio() {
 
         {/* Projects Section */}
         <section
-          className="relative py-20 bg-[#121212] grid grid-cols-2 justify-center items-center"
+          className="flex mt-48 mx-auto justify-items-center items-center"
           ref={navProjectRef}
         >
           <motion.div
@@ -241,8 +237,8 @@ export default function Portfolio() {
             transition={{ duration: 1 }}
             className=" mx-auto text-center text-[#E8E7CB]"
           >
-            <div className="mt-8">
-              <ProjectsCards />
+            <div className="">
+              <ProjectsCardsV2/>
             </div>
           </motion.div>
 
@@ -252,9 +248,9 @@ export default function Portfolio() {
             transition={{ duration: 1 }}
             className=" mx-auto text-center text-[#E8E7CB]"
           >
-            <div className="text-[700px] font-bold text-start font-drukXXCondTrial leading-none">
+            {/* <div className="text-[700px] font-bold text-start font-drukXXCondTrial leading-none">
               <span className="text-[#f5eee6]">PROJECTS</span>
-            </div>
+            </div> */}
           </motion.div>
         </section>
 

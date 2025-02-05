@@ -9,7 +9,7 @@ import {
   PauseCircleIcon,
   NextIcon,
 } from "./icons";
-import { Rnd } from "react-rnd";
+
 
 export default function FloatingAudioPlayer() {
   const [liked, setLiked] = useState(false);
@@ -18,7 +18,7 @@ export default function FloatingAudioPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const songAudio = "./audio.mp3"; // Ensure the path is correct
+  const songAudio = "./මා සිතින්Ranjulaillukpitiya.mp3"; // Ensure the path is correct
 
   const togglePlayPause = () => {
     if (audioRef.current) {
@@ -67,18 +67,6 @@ export default function FloatingAudioPlayer() {
       {/* Audio Element */}
       <audio ref={audioRef} src={songAudio} preload="metadata" />
 
-      {/* Draggable Floating Player */}
-      <Rnd
-        default={{
-          x: 50,
-          y: 50,
-          width: isMinimized ? 200 : 610,
-          height: isMinimized ? 70 : "auto",
-        }}
-        bounds="window"
-        enableResizing={false}
-        className="fixed bottom-4 right-4"
-      >
         <Card
           isBlurred
           className={`bg-background/60 dark:bg-default-100/50 shadow-lg ${
@@ -91,7 +79,7 @@ export default function FloatingAudioPlayer() {
               <div className="flex items-center justify-between">
                 <Image
                   alt="Album cover"
-                  src="https://cdns-images.dzcdn.net/images/cover/64ff10919f7a779e545400fde9b00532/1900x1900-000000-80-0-0.jpg"
+                  src="https://scontent.fcmb3-2.fna.fbcdn.net/v/t39.30808-6/461327504_3787497404879906_7116841053049631049_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFtYnPqAE0Om_0t71AXycuAL87LuqeiAMAvzsu6p6IAwEV3df3-HONlKr1n6ok6kPyhoauw67ZatgU1MlKSM8Sn&_nc_ohc=yZqA2oT8q04Q7kNvgH77mb0&_nc_zt=23&_nc_ht=scontent.fcmb3-2.fna&_nc_gid=Aj0xT0luY3CuRVPlIO2qmbB&oh=00_AYBx3l-LtzHbPPDrsyUDoWtXpzFQlNxJLSQyZzuYh5qL2w&oe=67843009"
                   width={50}
                   height={50}
                   className="rounded-md"
@@ -125,16 +113,16 @@ export default function FloatingAudioPlayer() {
                     className="object-cover rounded-md"
                     height={200}
                     shadow="md"
-                    src="https://cdns-images.dzcdn.net/images/cover/64ff10919f7a779e545400fde9b00532/1900x1900-000000-80-0-0.jpg"
+                    src="https://scontent.fcmb3-2.fna.fbcdn.net/v/t39.30808-6/461327504_3787497404879906_7116841053049631049_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFtYnPqAE0Om_0t71AXycuAL87LuqeiAMAvzsu6p6IAwEV3df3-HONlKr1n6ok6kPyhoauw67ZatgU1MlKSM8Sn&_nc_ohc=yZqA2oT8q04Q7kNvgH77mb0&_nc_zt=23&_nc_ht=scontent.fcmb3-2.fna&_nc_gid=Aj0xT0luY3CuRVPlIO2qmbB&oh=00_AYBx3l-LtzHbPPDrsyUDoWtXpzFQlNxJLSQyZzuYh5qL2w&oe=67843009"
                     width="100%"
                   />
                 </div>
                 <div className="flex flex-col col-span-6 md:col-span-8">
                   <div className="flex justify-between items-start">
                     <div className="flex flex-col gap-0">
-                      <h3 className="font-semibold text-foreground/90">Favorite</h3>
+                      <h3 className="font-semibold text-foreground/90">New</h3>
                       <p className="text-small text-foreground/80">1 Track</p>
-                      <h1 className="text-large font-medium mt-2">Hall Of Fame - The Script</h1>
+                      <h1 className="text-large font-medium mt-2">Ma Sithin (මා සිතින්) - Ranjula Ilukpitiya</h1>
                     </div>
                     <Button
                       isIconOnly
@@ -191,21 +179,21 @@ export default function FloatingAudioPlayer() {
                     </Button>
                   </div>
                   <div className="flex justify-end mt-4">
-                    <Button
+                    {/* <Button
                       onPress={toggleMinimize}
                       size="sm"
                       variant="solid"
                       className="text-small"
                     >
                       Minimize
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </div>
             )}
           </CardBody>
         </Card>
-      </Rnd>
+    
     </>
   );
 }

@@ -101,7 +101,7 @@ export default function ProjectsCards() {
           <CardHeader className="absolute z-10 top-1 flex-col items-start">
             <p className="text-tiny text-white/60 uppercase font-bold">New!</p>
             <h4 className="text-white/90 font-medium text-xl">
-              Research portfolio
+              FITG
             </h4>
           </CardHeader>
           <Image
@@ -118,10 +118,7 @@ export default function ProjectsCards() {
                 src="https://nextui.org/images/breathing-app-icon.jpeg"
               />
               <div className="flex flex-col">
-                <p className="text-tiny text-white/60">Fitness App</p>
-                <p className="text-tiny text-white/60">
-                  Do workouts, Stay healthy!
-                </p>
+                <p className="text-tiny text-white/60">Research portfolio</p>
               </div>
             </div>
           </CardFooter>
