@@ -8,10 +8,9 @@ import ContactForm from "./contact/contactForm";
 import DateCounter from "./datecounter/dateCounter";
 import Lottie from "react-lottie-player";
 import Info from "../../public/infoAnime.json";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import FloatingAudioPlayer from "./mp3Player/player";
 import ProjectsCardsV2 from "./Projects/projectsV2";
-
 
 export default function Portfolio() {
   const navProjectRef = useRef<HTMLDivElement>(null);
@@ -24,47 +23,27 @@ export default function Portfolio() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const imageFadeStart = window.innerHeight * 0.5; // Start fading after 25% of the viewport height
-      const imageFadeEnd = window.innerHeight * 0.65; // Gradual fade-out ends at 55% of the viewport height
-      const imageReappearStart = navProjectRef.current?.offsetTop || 0;
-      const imageReappearEnd = navContacttRef.current?.offsetTop || 0;
+      const windowHeight = window.innerHeight;
+      const contactSectionTop = navContacttRef.current?.offsetTop || 0;
 
-      // Gradual fade-out logic
-      if (scrollPosition < imageFadeStart) {
-        setBackgroundOpacity(1); // No fade at the top
-        setBackgroundPosition(0); // Keep image at the top
-      } else if (
-        scrollPosition >= imageFadeStart &&
-        scrollPosition <= imageFadeEnd
-      ) {
-        setBackgroundOpacity(
-          1 -
-            (scrollPosition - imageFadeStart) / (imageFadeEnd - imageFadeStart)
-        ); // Gradual fade-out
-        setBackgroundPosition(-scrollPosition * 0.2); // Image scrolls up slowly
-      } else if (
-        scrollPosition > imageFadeEnd &&
-        scrollPosition <= imageReappearStart
-      ) {
-        setBackgroundOpacity(0); // Fully faded out
-        setBackgroundPosition(-scrollPosition * 0.2); // Image scrolls faster
-      } else if (
-        scrollPosition > imageReappearStart &&
-        scrollPosition < imageReappearEnd
-      ) {
-        setBackgroundOpacity(0); // Keep the image faded out
-        setBackgroundPosition(0); // Reset the position
-      } else {
-        setBackgroundOpacity(0); // Keep the image fully faded out
-        setBackgroundPosition(imageReappearEnd - scrollPosition); // Keep moving image down till end
-      }
+      // Calculate fade out for background
+      const maxFadeScroll = windowHeight * 0.75;
+      const backgroundFade = 1 - Math.min(scrollPosition / maxFadeScroll, 1);
+
+      // Calculate reappearance in contact section
+      const contactSectionScroll =
+        scrollPosition - contactSectionTop + windowHeight;
+      const contactFade = Math.min(contactSectionScroll / windowHeight, 1);
+
+      // Combine both effects
+      const finalOpacity = Math.max(backgroundFade, contactFade * 0.4); // Adjust 0.4 for desired contact section visibility
+
+      setBackgroundOpacity(finalOpacity);
+      setBackgroundPosition(-scrollPosition * 0.2);
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleToast = () => {
@@ -87,13 +66,21 @@ export default function Portfolio() {
 
   return (
     <div className="bg-[#121212] text-white min-h-screen font-sans">
-      {/* Fixed Background Image with Scroll Effect */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        }}
+      />
+      {/* Fixed Background Image */}
       <div
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 transition-opacity duration-500"
         style={{
-          backgroundPositionY: `${backgroundPosition}px`,
           opacity: backgroundOpacity,
-          transition: "background-position 0.2s, opacity 0.2s", // Smooth transition
+          // transform: `translateY(${backgroundPosition}px)`,
         }}
       >
         <Image
@@ -107,78 +94,55 @@ export default function Portfolio() {
 
       <div>
         {/* Hero Section */}
-        <section className="relative z-10 h-screen flex items-center">
+        <section className="relative z-10 h-screen flex items-center px-4 md:px-0">
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="z-10"
+            className="z-10 w-full"
           >
-            <div className="grid grid-cols-2 gap-4 space-x-8">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:space-x-8">
               <button
-                className="absolute right-0 top-4 transform -translate-y-1/2 z-0 mt-4 uppercase mr-8"
+                className="absolute right-4 top-4 md:right-8 md:top-4 z-50"
                 onClick={handleToast}
               >
-                <span>
-                  <Lottie
-                    loop
-                    animationData={Info}
-                    play
-                    style={{ width: 30, height: 30 }} // Adjust size as needed
-                  />
-                </span>
+                <Lottie
+                  loop
+                  animationData={Info}
+                  play
+                  style={{ width: 30, height: 30 }}
+                />
               </button>
 
-              <div className="text-start pt-96">
-                <span className="text-[#f3dbc7] text-4xl font-migraExtrabold leading-none">
+              <div className="text-start pt-32 md:pt-96">
+                <span className="text-[#f3dbc7] text-2xl md:text-4xl font-migraExtrabold">
                   creative
                 </span>
-                <br />
-                <motion.span
-                  whileHover={{ scale: 1.1, color: "#f3dbc7" }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-zero tracking-[0.03em]"
-                >
-                  Frontend
-                </motion.span>
-                <br />
-                <motion.span
-                  whileHover={{ scale: 1.1, color: "#f3dbc7" }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                  className="text-[#f5eee6] text-[300px] font-drukXXCondTrial cursor-pointer uppercase leading-zero tracking-[0.03em]"
-                >
-                  Developer
-                </motion.span>
+                <motion.div className="text-[#f5eee6] md:text-[470px] text-[270px] font-drukXXCondTrial uppercase leading-none">
+                  <span className="block">Frontend</span>
+                  <span className="block">Developer</span>
+                </motion.div>
               </div>
 
-              <div>
+              <div className="mt-8 md:mt-0">
                 <DateCounter />
-                <span className="text-3xl font-migraExtrabold lowercase text-[#f3dbc7]">
-                  {new Date().toLocaleDateString("en-US", {
-                    month: "short",
-                  })}
+                <span className="text-xl md:text-3xl font-migraExtrabold lowercase text-[#f3dbc7]">
+                  {new Date().toLocaleDateString("en-US", { month: "short" })}
                 </span>
 
-                <div className="text-2xl text-[#f5eee6] font-semibold uppercase mt-64 px-14">
+                <div className="text-base md:text-2xl font-semibold uppercase mt-8 md:mt-64 px-0 md:px-14">
                   <p className="text-end">I am a developer and UI/UX</p>
-                  <p className="text-justify">
+                  <p className="text-justify mt-4">
                     enthusiast based in Sri Lanka. I specialize in creating
-                    intuitive and user-friendly digital experiences. With
-                    hands-on experience in front-end development, I love
-                    combining functionality with clean, modern design. I’m
-                    passionate about music, fitness, and art.
+                    intuitive digital experiences. With experience in front-end
+                    development, I love combining functionality with clean
+                    design.
                   </p>
                 </div>
 
-                <div className="mt-6 flex gap-4 justify-end mr-8">
-                  {/* <Button
-                className="hover:bg-[#E8E7CB]"
-                onClick={handleViewProjects}
-              >
-                View Projects
-              </Button> */}
+                <div className="mt-6 flex justify-center md:justify-end md:mr-8">
                   <Button
-                    className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-3xl p-5"
+                    className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-3xl p-4 md:p-5"
                     onClick={handleViewContacts}
                   >
                     Contact Me
@@ -190,81 +154,102 @@ export default function Portfolio() {
         </section>
 
         {/* Introduction Section */}
-        <section className="flex flex-col mx-auto mt-72">
+        <section className="mx-auto mt-32 md:mt-72 px-4 md:px-0">
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-center z-10"
           >
-            <div className="grid grid-cols-2 space-x-20">
-              <div className="pl-80">
-                <div className="pr-24">
-                  <p className="font-drukXXCondTrial text-[12rem] tracking-[0.03em] uppercase leading-zero6 text-end text-[#f5eee6]">
-                    Hello. I am Ranjula
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:space-x-20">
+              <div className="md:pl-20">
+                <div className="md:pr-24">
+                  <p className="font-drukXXCondTrial text-[200px] md:text-[270px] uppercase leading-tight text-[#f5eee6]">
+                    Hello. I'm Ranjula
                   </p>
-                  <p className="font-migraExtrabold text-xl tracking-wide leading-zero text-end text-[#f3dbc7]">
+                  <p className="font-migraExtrabold text-lg md:text-xl text-[#f3dbc7]">
                     Ranjula Ilukpitiya
                   </p>
                 </div>
-                <p className="text-balance text-2xl text-start font-semibold text-[#f5eee6] uppercase mt-10">
-                &nbsp;&nbsp;I turn ideas into digital experiences with clean design and
-                  smart code. From startups to agencies, I help craft everything
-                  from interfaces to strategies – all fueled by coffee and
-                  curiosity. When I’m not coding, I’m likely strumming my
-                  guitar, writing songs no one asked for, or losing gracefully
-                  in video games. Let’s create something awesome (or at least
-                  have a good laugh trying)!
+                <p className="text-base md:text-2xl text-[#f5eee6] uppercase mt-6">
+                  I turn ideas into digital experiences with clean design and
+                  smart code. From startups to agencies, I help craft interfaces
+                  and strategies. When I'm not coding, I'm making music or
+                  gaming.
                 </p>
               </div>
-
-              <div className="mx-auto my-auto">
-                <FloatingAudioPlayer/>
-              </div>
-
             </div>
           </motion.div>
         </section>
 
-        {/* Projects Section */}
-        <section
-          className="flex mt-48 mx-auto justify-items-center items-center"
-          ref={navProjectRef}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className=" mx-auto text-center text-[#E8E7CB]"
-          >
-            <div className="">
-              <ProjectsCardsV2/>
-            </div>
-          </motion.div>
+        {/* Audio Player */}
+        <div className="my-8 md:my-auto">
+          <FloatingAudioPlayer />
+        </div>
 
+        {/* Projects Section */}
+        <section className="mt-24 md:mt-48" ref={navProjectRef}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className=" mx-auto text-center text-[#E8E7CB]"
           >
-            {/* <div className="text-[700px] font-bold text-start font-drukXXCondTrial leading-none">
-              <span className="text-[#f5eee6]">PROJECTS</span>
-            </div> */}
+            <ProjectsCardsV2 />
           </motion.div>
+        </section>
+
+        <section className="grid grid-flow-col grid-rows-3 gap-4 mx-12">
+          <div className="row-span-3 text-[#f5eee6] text-start md:text-[470px] text-[300px] font-drukXXCondTrial uppercase leading-none">
+            <span className="block">LET'S </span>
+            <span className="block">CONNECT .</span>
+          </div>
+          <div className="col-span-2 row-span-2">
+            <p className="uppercase text-3xl md:text-[50px] ">
+              i'm always interested about
+            </p>
+            <div className="flex mt-14 gap-5">
+              <Button
+                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-5xl p-4 md:p-8">
+                UI/UX Design
+              </Button>
+              <Button
+                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-5xl p-4 md:p-8">
+                frontend development
+              </Button>
+            </div>
+            <div className="flex mt-5 pl-44 gap-5">
+              <Button
+                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-5xl p-4 md:p-8">
+                new business
+              </Button>
+              <Button
+                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-5xl p-4 md:p-8">
+                Hangout
+              </Button>
+              <Button
+                className="bg-transparent border-[#f5eee6] border text-[#f5eee6] rounded-full uppercase font-semibold text-lg md:text-5xl p-4 md:p-8">
+                Coffee
+              </Button>
+            </div>
+          </div>
+          <div className="col-span-2"></div>
         </section>
 
         {/* Contact Section */}
-        <section className=" py-20" ref={navContacttRef}>
+        <section className="pb-10 px-4 md:px-0" ref={navContacttRef}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="max-w-4xl mx-auto text-center text-[#E8E7CB]"
+            className="w-full mx-auto"
           >
-            <div className="text-4xl font-bold">Contact Me</div>
-            <div className="mt-8">
-              <ContactForm />
+            <div className="relative p-8 md:p-12">
+              <div className="">
+                <ContactForm />
+                <div className="mt-8 text-center text-sm text-white/60">
+                  <p>Or reach out directly on WhatsApp:</p>
+                  <p className="mt-2">+94 70 510 8896</p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </section>

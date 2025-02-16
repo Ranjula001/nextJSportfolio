@@ -104,8 +104,8 @@ export default function ContactForm() {
           required
           rows={4}
         />
-        <Button type="submit" color="primary" className="mt-4">
-          Submit
+        <Button type="submit" color="default" className="mt-4 font-medium hover:text-white bg-[#f3dbc7] hover:bg-black">
+          SEND
         </Button>
       </form>
     </div>

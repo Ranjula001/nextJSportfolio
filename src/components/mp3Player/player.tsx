@@ -10,7 +10,6 @@ import {
   NextIcon,
 } from "./icons";
 
-
 export default function FloatingAudioPlayer() {
   const [liked, setLiked] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -18,182 +17,196 @@ export default function FloatingAudioPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const songAudio = "./මා සිතින්Ranjulaillukpitiya.mp3"; // Ensure the path is correct
+  const songAudio = "/මා සිතින්Ranjulaillukpitiya.mp3"; // Ensure file is in public folder
 
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    const audio = audioRef.current;
+    if (audio) {
       if (isPlaying) {
-        audioRef.current.pause();
+        audio.pause();
       } else {
-        audioRef.current.play();
+        audio.play();
       }
       setIsPlaying(!isPlaying);
     }
   };
 
-  const toggleMinimize = () => {
-    setIsMinimized(!isMinimized);
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const handleSliderChange = (value: number) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
+      setCurrentTime(value);
     }
   };
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio) {
-      // Set duration when metadata is loaded
-      audio.addEventListener("loadedmetadata", () => {
-        setDuration(audio.duration);
-      });
+    if (!audio) return;
 
-      // Update current time while playing
-      audio.addEventListener("timeupdate", () => {
-        setCurrentTime(audio.currentTime);
-      });
+    const updateData = () => {
+      setDuration(audio.duration);
+      setCurrentTime(audio.currentTime);
+    };
 
-      // Clean up event listeners
-      return () => {
-        audio.removeEventListener("loadedmetadata", () => {});
-        audio.removeEventListener("timeupdate", () => {});
-      };
-    }
+    const updateTime = () => setCurrentTime(audio.currentTime);
+
+    audio.addEventListener('loadedmetadata', updateData);
+    audio.addEventListener('timeupdate', updateTime);
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', updateData);
+      audio.removeEventListener('timeupdate', updateTime);
+    };
   }, []);
 
   return (
-    <>
-      {/* Audio Element */}
+    <div className="fixed bottom-4 right-4 z-50">
       <audio ref={audioRef} src={songAudio} preload="metadata" />
-
-        <Card
-          isBlurred
-          className={`bg-background/60 dark:bg-default-100/50 shadow-lg ${
-            isMinimized ? "w-[200px] h-[70px]" : "w-[610px] h-auto"
-          }`}
-        >
-          <CardBody className={`transition-all duration-300 ${isMinimized ? "p-2" : "p-4"}`}>
-            {isMinimized ? (
-              // Minimized View
-              <div className="flex items-center justify-between">
+      
+      <Card
+        isBlurred
+        className={`bg-background/60 dark:bg-default-100/50 shadow-lg ${
+          isMinimized 
+            ? "w-[200px] max-w-[90vw] h-[70px]" 
+            : "w-full max-w-[610px] h-auto"
+        } transition-all duration-300`}
+      >
+        <CardBody className={isMinimized ? "p-2" : "p-4"}>
+          {isMinimized ? (
+            <div className="flex items-center justify-between gap-2">
+              <Image
+                alt="Album cover"
+                src="/me.jpg"
+                width={50}
+                height={50}
+                className="rounded-md object-cover"
+              />
+              <div className="flex flex-col flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">Ma Sithin</p>
+                <p className="text-xs text-foreground/80 truncate">Ranjula Ilukpitiya</p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  isIconOnly
+                  onPress={togglePlayPause}
+                  className="text-foreground"
+                  radius="full"
+                  size="sm"
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <PauseCircleIcon size={24} />
+                  ) : (
+                    <PauseCircleIcon size={24} />
+                  )}
+                </Button>
+                <Button
+                  isIconOnly
+                  onPress={() => setIsMinimized(false)}
+                  variant="flat"
+                  size="sm"
+                  aria-label="Maximize"
+                >
+                  ❤️
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+              <div className="relative col-span-4">
                 <Image
                   alt="Album cover"
-                  src="https://scontent.fcmb3-2.fna.fbcdn.net/v/t39.30808-6/461327504_3787497404879906_7116841053049631049_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFtYnPqAE0Om_0t71AXycuAL87LuqeiAMAvzsu6p6IAwEV3df3-HONlKr1n6ok6kPyhoauw67ZatgU1MlKSM8Sn&_nc_ohc=yZqA2oT8q04Q7kNvgH77mb0&_nc_zt=23&_nc_ht=scontent.fcmb3-2.fna&_nc_gid=Aj0xT0luY3CuRVPlIO2qmbB&oh=00_AYBx3l-LtzHbPPDrsyUDoWtXpzFQlNxJLSQyZzuYh5qL2w&oe=67843009"
-                  width={50}
-                  height={50}
-                  className="rounded-md"
+                  className="object-cover rounded-md"
+                  height={200}
+                  src="/me.jpg"
+                  width="100%"
                 />
-                <div className="flex gap-2">
+              </div>
+
+              <div className="flex flex-col col-span-8 gap-3">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-1">
+                    <h1 className="text-xl font-medium">Ma Sithin (මා සිතින්)</h1>
+                    <p className="text-sm text-foreground/80">Ranjula Ilukpitiya</p>
+                  </div>
+                  <Button
+                    isIconOnly
+                    onPress={() => setLiked(!liked)}
+                    className="text-default-900/60"
+                    radius="full"
+                    variant="light"
+                    aria-label="Like"
+                  >
+                    <HeartIcon
+                      className={liked ? "text-red-500" : "text-foreground/50"}
+                      fill={liked ? "currentColor" : "none"}
+                      size={24}
+                    />
+                  </Button>
+                </div>
+
+                <Slider
+                  aria-label="Music progress"
+                  value={currentTime}
+                  max={duration}
+                  onChange={handleSliderChange}
+                  size="sm"
+                  classNames={{
+                    track: "bg-default-500/30",
+                    thumb: "w-3 h-3 after:w-3 after:h-3 after:bg-foreground",
+                  }}
+                />
+
+                <div className="flex justify-between text-sm">
+                  <span>{formatTime(currentTime)}</span>
+                  <span className="text-foreground/50">{formatTime(duration)}</span>
+                </div>
+
+                <div className="flex items-center justify-center gap-4">
+                  <Button isIconOnly variant="light" aria-label="Repeat">
+                    <RepeatOneIcon size={20} />
+                  </Button>
+                  <Button isIconOnly variant="light" aria-label="Previous">
+                    <PreviousIcon size={20} />
+                  </Button>
                   <Button
                     isIconOnly
                     onPress={togglePlayPause}
-                    className="data-[hover]:bg-foreground/10"
-                    radius="full"
-                    variant="solid"
+                    className="w-12 h-12"
+                    aria-label={isPlaying ? "Pause" : "Play"}
                   >
-                    <PauseCircleIcon size={24} width={24} height={24} />
+                    {isPlaying ? (
+                      <PauseCircleIcon size={40} />
+                    ) : (
+                      <PauseCircleIcon size={40} />
+                    )}
                   </Button>
+                  <Button isIconOnly variant="light" aria-label="Next">
+                    <NextIcon size={20} />
+                  </Button>
+                </div>
+
+                <div className="flex justify-end">
                   <Button
-                    isIconOnly
-                    onPress={toggleMinimize}
-                    className="data-[hover]:bg-foreground/10"
-                    variant="solid"
+                    onPress={() => setIsMinimized(true)}
+                    size="sm"
+                    variant="flat"
+                    // endContent={<PauseCircleIcon size={14} />}
+                    aria-label="Minimize"
                   >
-                    ♪
+                    Minimize
                   </Button>
                 </div>
               </div>
-            ) : (
-              // Expanded View
-              <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
-                <div className="relative col-span-6 md:col-span-4">
-                  <Image
-                    alt="Album cover"
-                    className="object-cover rounded-md"
-                    height={200}
-                    shadow="md"
-                    src="https://scontent.fcmb3-2.fna.fbcdn.net/v/t39.30808-6/461327504_3787497404879906_7116841053049631049_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFtYnPqAE0Om_0t71AXycuAL87LuqeiAMAvzsu6p6IAwEV3df3-HONlKr1n6ok6kPyhoauw67ZatgU1MlKSM8Sn&_nc_ohc=yZqA2oT8q04Q7kNvgH77mb0&_nc_zt=23&_nc_ht=scontent.fcmb3-2.fna&_nc_gid=Aj0xT0luY3CuRVPlIO2qmbB&oh=00_AYBx3l-LtzHbPPDrsyUDoWtXpzFQlNxJLSQyZzuYh5qL2w&oe=67843009"
-                    width="100%"
-                  />
-                </div>
-                <div className="flex flex-col col-span-6 md:col-span-8">
-                  <div className="flex justify-between items-start">
-                    <div className="flex flex-col gap-0">
-                      <h3 className="font-semibold text-foreground/90">New</h3>
-                      <p className="text-small text-foreground/80">1 Track</p>
-                      <h1 className="text-large font-medium mt-2">Ma Sithin (මා සිතින්) - Ranjula Ilukpitiya</h1>
-                    </div>
-                    <Button
-                      isIconOnly
-                      onPress={() => setLiked((v) => !v)}
-                      className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2"
-                      radius="full"
-                      variant="solid"
-                    >
-                      <HeartIcon
-                        className={liked ? "[&>path]:stroke-white" : "[&>path]:stroke-red-600"}
-                        fill={liked ? "currentColor" : "red"}
-                        width={24}
-                        height={24}
-                      />
-                    </Button>
-                  </div>
-                  <div className="flex flex-col mt-3 gap-1">
-                    <Slider
-                      aria-label="Music progress"
-                      classNames={{
-                        track: "bg-default-500/30",
-                        thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
-                      }}
-                      color="foreground"
-                      defaultValue={0}
-                      value={currentTime}
-                      max={duration}
-                      onValueChange={handleSliderChange}
-                      size="sm"
-                    />
-                    <div className="flex justify-between">
-                      <p className="text-small">{`${Math.floor(currentTime / 60)}:${String(Math.floor(currentTime % 60)).padStart(2, '0')}`}</p>
-                      <p className="text-small text-foreground/50">{`${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, '0')}`}</p>
-                    </div>
-                  </div>
-                  <div className="flex w-full items-center justify-center space-x-4">
-                    <Button isIconOnly radius="full" variant="solid">
-                      <RepeatOneIcon width={24} height={24} />
-                    </Button>
-                    <Button isIconOnly radius="full" variant="solid">
-                      <PreviousIcon width={24} height={24} />
-                    </Button>
-                    <Button
-                      isIconOnly
-                      onPress={togglePlayPause}
-                      radius="full"
-                      variant="solid"
-                      className="w-auto h-auto"
-                    >
-                      <PauseCircleIcon size={54} width={54} height={54} />
-                    </Button>
-                    <Button isIconOnly radius="full" variant="solid">
-                      <NextIcon width={24} height={24} />
-                    </Button>
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    {/* <Button
-                      onPress={toggleMinimize}
-                      size="sm"
-                      variant="solid"
-                      className="text-small"
-                    >
-                      Minimize
-                    </Button> */}
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardBody>
-        </Card>
-    
-    </>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+    </div>
   );
 }
